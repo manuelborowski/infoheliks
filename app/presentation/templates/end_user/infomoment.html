@@ -1,0 +1,36 @@
+{% extends "end_user/base.html" %}
+
+{% block body %}
+    {{ super() }}
+
+    <div class="container-fluid">
+        <div id="infosession-form"></div>
+    </div>
+
+    <div class="modal" id="messageModal" tabindex="-1">
+        <div class="modal-dialog" style="max-width: 800px; margin-top: 20%;">
+            <div class="modal-content" style="background: #9ec31e;color: white;border-style: none;">
+                <div class="modal-header" style="border-style: none;">
+                    <h1 class="modal-title" style="width: 100%;text-align: center;">placeholder</h1>
+                </div>
+                <div class="modal-footer" style="margin: auto; border-style: none">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Boodschap sluiten</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        var user =
+        {{ config_data.user | tojson }}
+        var template =
+        {{ config_data.template | tojson }}
+        var default_values =
+        {{ config_data.default_values | tojson }}
+    </script>
+    <script type="text/javascript"> {% include "end_user/infomoment.js" %}</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "end_user/base.html" %}
+
+{% block body %}
+    {{ super() }}
+<div class="content-section">
+    <div class="center">
+        <div class="container-fluid">
+                <div id="survey-form"></div>
+        </div>
+    </div>
+</div>
+{%  endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        var survey_form = {{ template | tojson }}
+        var survey_endpoint = {{ survey_endpoint | tojson }}
+        var default_values = {{ default_values | tojson }}
+    </script>
+    <script type="module"> {% include "end_user/survey.js" %}</script>
+{% endblock %}

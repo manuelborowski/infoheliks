@@ -1,0 +1,134 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #edeff2;
+    font-family: "Calibri", "Roboto", sans-serif;
+}
+
+.chat_window {
+    position: absolute;
+    width: calc(100% - 20px);
+    max-width: 800px;
+    height: 100%;
+    border-radius: 10px;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    background-color: #f8f8f8;
+    overflow: hidden;
+}
+
+.top_menu {
+    background-color: #9dc31c;
+    width: 100%;
+    box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
+}
+
+.top_menu .title {
+    text-align: center;
+    color: #038289;
+    font-size: 20px;
+}
+
+.messages {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    height: 90%;
+    overflow: scroll;
+    background: #f6f9ec;
+    padding: 0;
+}
+
+.messages .message {
+    display: inline-flex;
+    flex-direction: column;
+    width: 98%;
+    margin: 4px;
+    margin-bottom: 10px;
+}
+
+.messages .message .avatar {
+    display: inline-flex;
+    color: #7fb0b4;
+}
+
+.messages .message .text_wrapper {
+    margin-left: 5px;
+    border-style: solid;
+    border-color: #038289;
+    border-width: thin;
+    border-radius: 10px;
+    display: inline-flex;
+    padding: 5px
+}
+
+.messages .message.left .avatar {
+    flex-direction: row;
+}
+
+.messages .message.left .text_wrapper {
+    flex-direction: row;
+}
+
+.messages .message.right .avatar {
+    flex-direction: row-reverse;
+}
+
+.messages .message.right .text_wrapper {
+    flex-direction: row-reverse;
+}
+
+.messages .message .text_wrapper .text {
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.bottom_wrapper {
+    width: 100%;
+    background-color: #9dc31c;
+    padding-left: 20px;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+}
+
+.bottom_wrapper .message_input_wrapper {
+    height: 30px;
+    border-radius: 25px;
+    width: 80%;
+    padding-left: 20px;
+    padding-top: 5px;
+}
+
+.bottom_wrapper .message_input_wrapper .message_input {
+    border: none;
+    width: 100%;
+}
+
+.bottom_wrapper .send_message {
+    width: 60px;
+    height: 50px;
+    border-radius: 50px;
+    background-color: #038289;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    margin-left: 30px;
+}
+
+.bottom_wrapper .send_message:hover {
+    color: #a3d063;
+    background-color: #fff;
+}
+
+.bottom_wrapper .send_message .text {
+    font-size: 18px;
+    font-weight: 300;
+    display: inline-block;
+    line-height: 48px;
+}
+
