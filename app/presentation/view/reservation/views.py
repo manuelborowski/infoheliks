@@ -3,9 +3,9 @@ from app import admin_required, log, supervisor_required
 from flask import redirect, url_for, request, render_template
 from flask_login import login_required
 from app.presentation.view import base_multiple_items
-from app.data import reservation as mdreservation
+from app.data import end_user as mend_user
 from app.application import reservation as mreservation, settings as msettings, socketio as msocketio
-from app.data.models import SchoolReservation, AvailablePeriod, EndUser, Visit
+from app.data.models import EndUser
 from app.presentation.layout.utils import flash_plus, button_pressed
 from app.presentation.view import update_available_periods, false, true, null, prepare_registration_form
 
@@ -57,7 +57,7 @@ def item_edit(done=False, id=-1):
 def item_delete():
     try:
         chbx_id_list = request.form.getlist('chbx')
-        mreservation.delete_registration(visit_id_list=chbx_id_list)
+        mreservation.delete_registration(user_id_list=chbx_id_list)
     except Exception as e:
         log.error(f'Could not delete registration: {e}')
         flash_plus(u'Kan de registraties niet verwijderen', e)
@@ -77,7 +77,7 @@ def reservation_save(form_data):
                 flash_plus('Kon de reservatie niet verwijderen', e)
         else:
             try:
-                ret = mreservation.add_or_update_registration(data, update_by_end_user=False)
+                ret = mreservation.add_registration(data, update_by_end_user=False)
                 if ret.result == ret.Result.E_NO_VISIT_SELECTED:
                     flash_plus('Geen tijdslot geselecteerd')
                 if ret.result == ret.Result.E_NOT_ENOUGH_VISITS:
@@ -91,11 +91,11 @@ def reservation_save(form_data):
 
 def update_meeting_cb(msg, client_sid=None):
     if msg['data']['column'] == 8: # registration ack mail sent column
-        mreservation.update_visit_email_sent_by_id(msg['data']['id'], msg['data']['value'])
+        mreservation.update_end_user_email_sent_by_id(msg['data']['id'], msg['data']['value'])
     if msg['data']['column'] == 9: # survey email sent column
-        mreservation.update_visit_survey_email_sent_by_id(msg['data']['id'], msg['data']['value'])
+        mreservation.update_end_user_survey_email_sent_by_id(msg['data']['id'], msg['data']['value'])
     if msg['data']['column'] == 10: # enable  column
-        mreservation.update_visit_enable_by_id(msg['data']['id'], msg['data']['value'])
+        mreservation.update_end_user_enable_by_id(msg['data']['id'], msg['data']['value'])
     if msg['data']['column'] == 11:  # update tx-retry column
         mreservation.update_email_send_retry_by_id(msg['data']['id'], msg['data']['value'])
     msocketio.send_to_room({'type': 'celledit-reservation', 'data': {'status': True}}, client_sid)
@@ -107,9 +107,9 @@ def ack_email_sent_cb(value, opaque):
     msocketio.broadcast_message({'type': 'celledit-reservation', 'data': {'reload-table': True}})
 
 
-mreservation.subscribe_visit_ack_email_sent(ack_email_sent_cb, None)
-mreservation.subscribe_visit_survey_email_sent(ack_email_sent_cb, None)
-mreservation.subscribe_visit_email_send_retry(ack_email_sent_cb, None)
+mreservation.subscribe_end_user_ack_email_sent(ack_email_sent_cb, None)
+mreservation.subscribe_end_user_survey_email_sent(ack_email_sent_cb, None)
+mreservation.subscribe_end_user_email_send_retry(ack_email_sent_cb, None)
 mreservation.subscribe_visit_enabled(ack_email_sent_cb, None)
 
 
@@ -124,20 +124,17 @@ table_configuration = {
     'template': [
         {'name': 'row_action', 'data': 'row_action', 'width': '2%'},
 
-        {'name': 'Tijdslot', 'data': 'timeslot', 'order_by': Visit.timeslot, 'orderable': True},
         {'name': 'Naam', 'data': 'full_name', 'order_by': EndUser.first_name, 'orderable': True},
         {'name': 'E-mail', 'data': 'end-user-email', 'order_by': EndUser.email, 'orderable': True},
         {'name': 'Profiel', 'data': 'profile_text', 'order_by': EndUser.profile, 'orderable': True},
-        {'name': 'Subprofiel', 'data': 'sub_profile', 'order_by': EndUser.sub_profile, 'orderable': True},
-        {'name': 'Code', 'data': 'code', 'order_by': Visit.code, 'orderable': True},
-        {'name': 'Room', 'data': 'room_code', 'order_by': Visit.room_code, 'orderable': True},
-        {'name': 'Reg-bericht verzonden', 'data': 'email_sent', 'order_by': Visit.email_sent, 'orderable': True,
+        {'name': 'Code', 'data': 'code', 'order_by': EndUser.code, 'orderable': True},
+        {'name': 'Reg-bericht verzonden', 'data': 'email_sent', 'order_by': EndUser.email_sent, 'orderable': True,
          'celltoggle': 'standard'},
-        {'name': 'Bevraging-bericht verzonden', 'data': 'survey_email_sent', 'order_by': Visit.survey_email_sent, 'orderable': True,
+        {'name': 'Bevraging-bericht verzonden', 'data': 'survey_email_sent', 'order_by': EndUser.survey_email_sent, 'orderable': True,
          'celltoggle': 'standard'},
-        {'name': 'Actief', 'data': 'enabled', 'order_by': Visit.enabled, 'orderable': True,
+        {'name': 'Actief', 'data': 'enabled', 'order_by': EndUser.enabled, 'orderable': True,
          'celltoggle': 'standard'},
-        {'name': 'Tx-retry', 'data': 'email-send-retry', 'order_by': Visit.email_send_retry, 'orderable': True, 'celledit': 'text'},
+        {'name': 'Tx-retry', 'data': 'email-send-retry', 'order_by': EndUser.email_send_retry, 'orderable': True, 'celledit': 'text'},
     ],
     'filter': [],
     'item': {
@@ -146,9 +143,9 @@ table_configuration = {
         # 'add': {'title': 'Voeg een reservatie toe', 'buttons': ['save', 'cancel']},
     },
     'href': [],
-    'pre_filter': mdreservation.pre_filter,
-    'format_data': mdreservation.format_data,
-    'search_data': mdreservation.search_data,
+    'pre_filter': mend_user.pre_filter,
+    'format_data': mend_user.format_data,
+    'search_data': mend_user.search_data,
     'default_order': (1, 'asc'),
     'socketio_endpoint': 'celledit-reservation',
     # 'cell_color': {'supress_cell_content': True, 'color_keys': {'X': 'red', 'O': 'green'}}, #TEST

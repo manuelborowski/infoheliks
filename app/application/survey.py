@@ -1,5 +1,5 @@
 from app import log
-from app.data import settings as msettings, visit as mvisit, survey as msurvey, end_user as mend_user
+from app.data import settings as msettings, survey as msurvey, end_user as mend_user
 from app.application import email as memail, utils as mutils
 import json
 
@@ -19,8 +19,8 @@ class SurveyResult:
 
 def get_survey_template(code=None):
     try:
-        visit = mvisit.get_first_visit(code=code)
-        if visit:
+        user = mend_user.get_first_end_user(code=code)
+        if user:
             template = json.loads(msettings.get_configuration_setting('survey-template'))
             ret = {
                 'template': template,
@@ -37,16 +37,12 @@ def get_survey_template(code=None):
 def save_survey(data):
     try:
         code = data['guest-code']
-        visit = mvisit.get_first_visit(code=code)
-        if visit:
+        user = mend_user.get_first_end_user(code=code)
+        if user:
             template = json.loads(msettings.get_configuration_setting('survey-default-results-template'))
             template = mutils.deepupdate(template, data)
             data_string = json.dumps(template).replace('true', '1').replace('false', '0')
-            survey = msurvey.get_first_survey(code=code)
-            if survey:
-                msurvey.update_survey(survey, data=data_string)
-            else:
-                msurvey.add_survey(code, data_string)
+            msurvey.update_survey(user, data=data_string)
             return SurveyResult(result=SurveyResult.Result.E_OK)
     except Exception as e:
         mutils.raise_error(f'could not add survey', e)
@@ -55,23 +51,23 @@ def save_survey(data):
 
 def send_survey_email(**kwargs):
     try:
-        visit = mvisit.get_first_not_sent_survey()
-        if visit:
+        user = mend_user.get_first_not_sent_survey()
+        if user:
             email_send_max_retries = msettings.get_configuration_setting('email-send-max-retries')
-            if visit.email_send_retry >= email_send_max_retries:
-                visit.set_enabled(False)
+            if user.email_send_retry >= email_send_max_retries:
+                user.set_enabled(False)
                 return
-            visit.set_email_send_retry(visit.email_send_retry + 1)
+            user.set_email_send_retry(user.email_send_retry + 1)
             email_subject = msettings.get_configuration_setting('survey-mail-subject-template')
             email_content = msettings.get_configuration_setting('survey-mail-content-template')
             base_url = msettings.get_configuration_setting("base-url")
-            survey_url = f'{base_url}/survey_new?code={visit.code}'
+            survey_url = f'{base_url}/survey_new?code={user.code}'
 
             email_content = email_content.replace('{{URL-TAG}}', f'<a href="{survey_url}">hier</a>')
-            log.info(f'"{email_subject}" to {visit.end_user.email}')
-            ret = memail.send_email(visit.end_user.email, email_subject, email_content)
+            log.info(f'"{email_subject}" to {user.end_user.email}')
+            ret = memail.send_email(user.end_user.email, email_subject, email_content)
             if ret:
-                visit.set_survey_email_sent(True)
+                user.set_survey_email_sent(True)
             return ret
         return False
     except Exception as e:

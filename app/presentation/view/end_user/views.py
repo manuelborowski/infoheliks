@@ -17,10 +17,8 @@ def register():
         ret = prepare_registration_form(code=code)
         if ret.result == ret.Result.E_COULD_NOT_REGISTER:
             return render_template('end_user/messages.html', type='could-not-register')
-        if ret.result == ret.Result.E_NO_REGISTRATION_FOUND:
-            return render_template('end_user/messages.html', type='no-registration-found', info=ret.registration)
         return render_template('end_user/register.html', config_data=ret.registration,
-                               registration_endpoint = 'end_user.register_save')
+                               registration_endpoint='end_user.register_save')
     except Exception as e:
         log.error(f'could not register {request.args}: {e}')
         return render_template('end_user/messages.html', type='unknown-error', message=e)
@@ -38,24 +36,9 @@ def register_save(form_data):
                 return render_template('end_user/messages.html', type='could-not-cancel', message=e)
         else:
             try:
-                ret = mreservation.add_or_update_registration(data)
-                if ret.result == ret.Result.E_NO_VISIT_SELECTED:
-                    return render_template('end_user/messages.html', type='no-visit-selected', info=ret.registration)
-                if ret.result == ret.Result.E_NOT_ENOUGH_VISITS:
-                    return render_template('end_user/messages.html', type='not-enough-visits', info=ret.registration)
-                if ret.result == ret.Result.E_GUEST_OK:
-                    return render_template('end_user/messages.html', type='register-guest-ok', info=ret.registration)
-
-                if ret.result == ret.Result.E_NO_FLOOR_SELECTED:
-                    return render_template('end_user/messages.html', type='no-floor-selected', info=ret.registration)
-                if ret.result == ret.Result.E_FLOOR_COWORKER_OK:
-                    return render_template('end_user/messages.html', type='register-floor-coworker-ok', info=ret.registration)
-
-                if ret.result == ret.Result.E_NO_FAIR_SELECTED:
-                    return render_template('end_user/messages.html', type='no-fair-selected', info=ret.registration)
-                if ret.result == ret.Result.E_FAIR_COWORKER_OK:
-                    return render_template('end_user/messages.html', type='register-fair-coworker-ok', info=ret.registration)
-
+                ret = mreservation.add_registration(data)
+                if ret.result == ret.Result.E_REGISTER_OK:
+                    return render_template('end_user/messages.html', type='register-ok', info=ret.registration)
             except Exception as e:
                 return render_template('end_user/messages.html', type='could-not-register', message=e)
             return render_template('end_user/messages.html', type='could-not-register')

@@ -1,4 +1,4 @@
-from app.application import reservation as mreservation, settings as msettings, enter as menter, utils as mutils, room as mroom
+from app.application import reservation as mreservation, settings as msettings, enter as menter, utils as mutils
 from app import flask_app
 import json, re
 
@@ -7,69 +7,9 @@ true = True
 null = None
 
 
-def prepare_registration_form(code=None, id=None):
-    ret = mreservation.get_default_values(code, id)
-    if ret.result == ret.Result.E_OK:
-        if 'timeslots' in ret.registration:
-            update_timeslots(ret.registration['timeslots'], ret.registration['template'], 'radio-visit-timeslots')
-        if 'floors' in ret.registration:
-            update_floors(ret.registration['floors'], ret.registration['template'], 'radio-floor-levels')
-        if 'fairs' in ret.registration:
-            update_fairs(ret.registration['fairs'], ret.registration['template'], 'radio-fair-schools')
+def prepare_registration_form(code=None):
+    ret = mreservation.get_registration_template(code)
     return ret
-
-
-def update_timeslots(timeslots, form, key):
-    components = form['components']
-    for component in components:
-        if 'key' in component and component['key'] == key:
-            value_template = component['values'][0]
-            component['values'] = []
-            for timeslot in timeslots:
-                if timeslot['nbr_visits_available'] <= 0:
-                    continue
-                new_value = dict(value_template)
-                new_value['label'] = timeslot['label']
-                new_value['value'] = timeslot['value']
-                component['values'].append(new_value)
-            return
-        if 'components' in component:
-            update_timeslots(timeslots, component, key)
-    return
-
-
-def update_floors(floors, form, key):
-    components = form['components']
-    for component in components:
-        if 'key' in component and component['key'] == key:
-            value_template = component['values'][0]
-            component['values'] = []
-            for floor in floors:
-                new_value = dict(value_template)
-                new_value['label'] = floor['label']
-                new_value['value'] = floor['value']
-                component['values'].append(new_value)
-            return
-        if 'components' in component:
-            update_floors(floors, component, key)
-    return
-
-
-def update_fairs(fairs, form, key):
-    components = form['components']
-    for component in components:
-        if 'key' in component and component['key'] == key:
-            value_template = component['values'][0]
-            component['values'] = []
-            for fair in fairs:
-                new_value = dict(value_template)
-                new_value['label'] = fair['label']
-                new_value['value'] = fair['value']
-                component['values'].append(new_value)
-            return
-        if 'components' in component:
-            update_floors(fairs, component, key)
-    return
 
 
 def update_available_periods(periods, form, key):
@@ -169,11 +109,11 @@ def prepare_enter_form(code):
                 child['collapsed'] = False
                 child['collapsible'] = False
                 child['title'] = item['title']
-                wonder_links = menter.get_wonder_links(ret.ret['user'])
+                wonder_links = menter.get_wonder_link()
                 for link in wonder_links:
                     inner_child = mutils.deepcopy(formio_component_templates['content'])
                     template = mutils.deepcopy(wonder_link_template)
-                    template = template.replace('{{URL-TAG}}', link['link']).replace('{{TIMESLOT-TAG}}', link['timeslot'])
+                    template = template.replace('{{URL-TAG}}', link)
                     inner_child['html'] = template
                     child['components'].append(inner_child)
             parent.append(child)
@@ -268,7 +208,6 @@ def get_youtube_id_from_url(url):
 
 
 def prepare_survey_form(code):
-
     ret = menter.end_user_wants_to_enter(code)
     if ret.ret:
         embedded_video_template = msettings.get_embedded_video_template()

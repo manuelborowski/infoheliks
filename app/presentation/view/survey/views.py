@@ -5,7 +5,7 @@ from flask_login import login_required
 from app.presentation.view import base_multiple_items
 from app.data import survey as msurvey
 from app.application import reservation as mreservation, settings as msettings, socketio as msocketio
-from app.data.models import SchoolReservation, AvailablePeriod, EndUserSurvey
+from app.data.models import EndUserSurvey
 from app.presentation.layout.utils import flash_plus, button_pressed
 from app.presentation.view import update_available_periods, false, true, null, prepare_registration_form
 

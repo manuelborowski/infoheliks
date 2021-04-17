@@ -67,51 +67,13 @@ class StageSetting:
 # 17.00 u - 17.30u - 18.00u - 18.30u
 
 default_configuration_settings = {
-    'stage-2-start-timer-at': (StageSetting.E_AFTER_START_TIMESLOT, Settings.SETTING_TYPE.E_STRING),
-    'stage-2-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'stage-2-delay-start-timer-until-start-timeslot': (True, Settings.SETTING_TYPE.E_BOOL),
-    'stage-3-start-timer-at': (StageSetting.E_AFTER_START_TIMESLOT, Settings.SETTING_TYPE.E_STRING),
-    'stage-3-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'stage-3-delay-start-timer-until-start-timeslot': (True, Settings.SETTING_TYPE.E_BOOL),
-
-    'Bezoeker-stage-2-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Bezoeker-stage-3-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Bezoeker-stage-4-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Schoolmedewerker-stage-2-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Schoolmedewerker-stage-3-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Schoolmedewerker-stage-4-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Scholengemeenschapmedewerker-stage-2-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Scholengemeenschapmedewerker-stage-3-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Scholengemeenschapmedewerker-stage-4-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Test-stage-2-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Test-stage-3-delay': (0, Settings.SETTING_TYPE.E_INT),
-    'Test-stage-4-delay': (0, Settings.SETTING_TYPE.E_INT),
-
-    'timeslot-first-start': (datetime.datetime(2021, 2, 1, 14, 0), Settings.SETTING_TYPE.E_DATETIME),
-    'timeslot-length': (30, Settings.SETTING_TYPE.E_INT),
-    'timeslot-number': (10, Settings.SETTING_TYPE.E_INT),
-    'timeslot-max-guests': (50, Settings.SETTING_TYPE.E_INT),
-    'timeslot-break-first-start': (datetime.datetime(2021, 2, 1, 14, 0), Settings.SETTING_TYPE.E_DATETIME),
-    'timeslot-break-number': (10, Settings.SETTING_TYPE.E_INT),
-
     'register-guest-template': ('', Settings.SETTING_TYPE.E_STRING),
     'register-guest-mail-ack-subject-template': ('', Settings.SETTING_TYPE.E_STRING),
     'register-guest-mail-ack-content-template': ('', Settings.SETTING_TYPE.E_STRING),
 
-    'register-floor-coworker-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'register-floor-coworker-mail-ack-subject-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'register-floor-coworker-mail-ack-content-template': ('', Settings.SETTING_TYPE.E_STRING),
-
-    'register-fair-coworker-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'register-fair-coworker-mail-ack-subject-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'register-fair-coworker-mail-ack-content-template': ('', Settings.SETTING_TYPE.E_STRING),
-
-    'register-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'register-mail-ack-subject-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'register-mail-ack-content-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'meeting-mail-ack-subject-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'meeting-mail-ack-content-template': ('', Settings.SETTING_TYPE.E_STRING),
-
+    'register-coworker-template': ('', Settings.SETTING_TYPE.E_STRING),
+    'register-coworker-mail-ack-subject-template': ('', Settings.SETTING_TYPE.E_STRING),
+    'register-coworker-mail-ack-content-template': ('', Settings.SETTING_TYPE.E_STRING),
 
     'email-send-max-retries': (2, Settings.SETTING_TYPE.E_INT),
     'email-task-interval': (10, Settings.SETTING_TYPE.E_INT),
@@ -123,7 +85,6 @@ default_configuration_settings = {
 
     'infosession-template': ('', Settings.SETTING_TYPE.E_STRING),
 
-    'chat-room-template': ('', Settings.SETTING_TYPE.E_STRING),
     'embedded-video-template': ('', Settings.SETTING_TYPE.E_STRING),
     'floating-video-template': ('', Settings.SETTING_TYPE.E_STRING),
     'floating-pdf-template': ('', Settings.SETTING_TYPE.E_STRING),
@@ -131,8 +92,7 @@ default_configuration_settings = {
     'link-template': ('', Settings.SETTING_TYPE.E_STRING),
     'infosession-content-json': ('', Settings.SETTING_TYPE.E_STRING),
 
-    'wonder-link-odd': ('https://www.wonder.me/r?id=816ecec6-802e-468e-b9d5-7950f8f7f58a', Settings.SETTING_TYPE.E_STRING),
-    'wonder-link-even': ('https://www.wonder.me/r?id=7634ca3b-9333-496f-b372-1b9173b0f47d', Settings.SETTING_TYPE.E_STRING),
+    'wonder-link': ('https://www.wonder.me/r?id=816ecec6-802e-468e-b9d5-7950f8f7f58a', Settings.SETTING_TYPE.E_STRING),
 
     'wonder-link-template': ('', Settings.SETTING_TYPE.E_STRING),
 
@@ -144,6 +104,7 @@ default_configuration_settings = {
     'test-wonder-room': (True, Settings.SETTING_TYPE.E_BOOL),
 
     'enter-site-popup-template': ('', Settings.SETTING_TYPE.E_STRING),
+    'site-open-at': ('2021-05-03 19:00', Settings.SETTING_TYPE.E_DATETIME),
 }
 
 
@@ -155,7 +116,7 @@ def get_configuration_settings():
 
 
 def set_configuration_setting(setting, value):
-    if value == None:
+    if None == value:
         value = default_configuration_settings[setting][0]
     return set_setting(setting, value, 1)
 
@@ -171,4 +132,4 @@ def get_configuration_setting(setting):
 
 
 # save settings which are not in the database yet
-get_configuration_settings()
+# get_configuration_settings()
