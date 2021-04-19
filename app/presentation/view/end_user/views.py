@@ -9,7 +9,6 @@ from app.presentation.view import  prepare_registration_form, prepare_enter_form
 @end_user.route('/register', methods=['POST', 'GET'])
 def register():
     try:
-
         current_url = request.url
         current_url = re.sub(f'{request.url_rule.rule}.*', '', current_url)
         memail.set_base_url(current_url)

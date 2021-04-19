@@ -3,10 +3,12 @@ from app import email, log, email_scheduler, flask_app
 import datetime, time, re
 from flask_mail import Message
 
+
 def send_email(to, subject, content):
     msg = Message(sender=flask_app.config['MAIL_USERNAME'], recipients=[to], subject=subject, html=content)
     try:
         email.send(msg)
+        log.info(f'email sent to {to}')
         return True
     except Exception as e:
         log.error(f'send_email: ERROR, could not send email: {e}')
@@ -31,13 +33,9 @@ def send_register_ack(**kwargs):
                 user.set_enabled(False)
                 return
             user.set_email_send_retry(user.email_send_retry + 1)
-            flat = user.flat()
             email_subject = msettings.get_configuration_setting('register-guest-mail-ack-subject-template')
             email_content = msettings.get_configuration_setting('register-guest-mail-ack-content-template')
 
-            email_subject = email_subject.replace('{{TAG-TIMESLOT}}', flat['timeslot'])
-
-            email_content = email_content.replace('{{TAG-TIMESLOT}}', flat['timeslot'])
             base_url = msettings.get_configuration_setting("base-url")
             enter_url = f'{base_url}/enter?code={user.code}'
             update_url = f'{base_url}/register?code={user.code}'
@@ -45,8 +43,8 @@ def send_register_ack(**kwargs):
             email_content = email_content.replace('{{TAG-ENTER-URL}}', f'<a href="{enter_url}">deze link</a>')
             email_content = email_content.replace('{{TAG-UPDATE-URL}}', f'<a href="{update_url}">hier</a>')
 
-            log.info(f'"{email_subject}" to {user.end_user.email}')
-            ret = send_email(user.end_user.email, email_subject, email_content)
+            log.info(f'"{email_subject}" to {user.email}')
+            ret = send_email(user.email, email_subject, email_content)
             if ret:
                 user.set_email_sent(True)
             return ret

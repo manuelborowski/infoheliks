@@ -13,10 +13,11 @@ from flask_mail import Mail
 flask_app = Flask(__name__, instance_relative_config=True, template_folder='presentation/templates/')
 
 # V0.1: copy from infodemol 1.10
+# V0.2: registration seems to be ok
 
 @flask_app.context_processor
 def inject_version():
-    return dict(version='V0.1')
+    return dict(version='V0.2')
 
 
 # enable logging

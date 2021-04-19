@@ -68,11 +68,13 @@ def get_registration_template(code=None):
     try:
         if code == flask_app.config['REGISTER_GUEST_CODE']:
             register_template = json.loads(msettings.get_configuration_setting('register-guest-template'))
+            default_settings = {'end-user-profile': mend_user.Profile.E_GUEST}
         elif code == flask_app.config['REGISTER_COWORKER_CODE']:
             register_template = json.loads(msettings.get_configuration_setting('register-coworker-template'))
+            default_settings = {'end-user-profile': mend_user.Profile.E_COWORKER}
         else:
             return RegisterSaveResult(result=RegisterSaveResult.Result.E_COULD_NOT_REGISTER)
-        ret = {'template': register_template}
+        ret = {'template': register_template, 'default': default_settings}
         return RegisterSaveResult(result=RegisterSaveResult.Result.E_OK, registration=ret)
     except Exception as e:
         mutils.raise_error(f'could not get reservation by code {code}', e)

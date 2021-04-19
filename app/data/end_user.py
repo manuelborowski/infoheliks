@@ -1,5 +1,6 @@
 from app.data.models import EndUser
 from app.data import utils as mutils, end_user as mend_user
+from sqlalchemy import not_
 import random, string, datetime
 from app import log, db
 
@@ -144,7 +145,7 @@ def subscribe_enabled(cb, opaque):
 
 def get_first_not_sent_registration():
     end_user = EndUser.query.filter(EndUser.enabled)
-    end_user = end_user.filter(not EndUser.email_sent)
+    end_user = end_user.filter(not_(EndUser.email_sent))
     end_user = end_user.first()
     return end_user
 
