@@ -174,11 +174,9 @@ def search_data(search_string):
 
 def format_data(db_list):
     out = []
-    # for i in db_list:
-    #     survey = i.ret_dict()
-    #     em = json.loads(survey['result'])
-    #     em['row_action'] = f"{i.id}"
-    #     em['id'] = f"{i.id}"
-    #     em['DT_RowId'] = f"{i.id}"
-    #     out.append(em)
+    for i in db_list:
+        em = i.flat()
+        em['row_action'] = f"{i.id}"
+        em['DT_RowId'] = f"{i.id}"
+        out.append(em)
     return out

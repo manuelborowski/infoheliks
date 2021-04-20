@@ -73,7 +73,19 @@ def get_registration_template(code=None):
             register_template = json.loads(msettings.get_configuration_setting('register-coworker-template'))
             default_settings = {'end-user-profile': mend_user.Profile.E_COWORKER}
         else:
-            return RegisterSaveResult(result=RegisterSaveResult.Result.E_COULD_NOT_REGISTER)
+            user = mend_user.get_first_end_user(code=code)
+            if user:
+                default_settings = {
+                    'end-user-profile': user.profile,
+                    'registration-code': code
+                }
+                default_settings.update(user.flat())
+                if user.profile == mend_user.Profile.E_GUEST:
+                    register_template = json.loads(msettings.get_configuration_setting('register-guest-template'))
+                else:
+                    register_template = json.loads(msettings.get_configuration_setting('register-coworker-template'))
+            else:
+                return RegisterSaveResult(result=RegisterSaveResult.Result.E_COULD_NOT_REGISTER)
         ret = {'template': register_template, 'default': default_settings}
         return RegisterSaveResult(result=RegisterSaveResult.Result.E_OK, registration=ret)
     except Exception as e:

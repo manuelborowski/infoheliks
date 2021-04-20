@@ -90,15 +90,14 @@ def reservation_save(form_data):
 
 
 def update_meeting_cb(msg, client_sid=None):
-    if msg['data']['column'] == 8: # registration ack mail sent column
+    if msg['data']['column'] == 5:  # registration ack mail sent column
         mreservation.update_end_user_email_sent_by_id(msg['data']['id'], msg['data']['value'])
-    if msg['data']['column'] == 9: # survey email sent column
-        mreservation.update_end_user_survey_email_sent_by_id(msg['data']['id'], msg['data']['value'])
-    if msg['data']['column'] == 10: # enable  column
+    if msg['data']['column'] == 6:  # enable  column
         mreservation.update_end_user_enable_by_id(msg['data']['id'], msg['data']['value'])
-    if msg['data']['column'] == 11:  # update tx-retry column
+    if msg['data']['column'] == 7:  # update tx-retry column
         mreservation.update_email_send_retry_by_id(msg['data']['id'], msg['data']['value'])
     msocketio.send_to_room({'type': 'celledit-reservation', 'data': {'status': True}}, client_sid)
+
 
 msocketio.subscribe_on_type('celledit-reservation', update_meeting_cb)
 
@@ -108,7 +107,6 @@ def ack_email_sent_cb(value, opaque):
 
 
 mreservation.subscribe_end_user_ack_email_sent(ack_email_sent_cb, None)
-mreservation.subscribe_end_user_survey_email_sent(ack_email_sent_cb, None)
 mreservation.subscribe_end_user_email_send_retry(ack_email_sent_cb, None)
 mreservation.subscribe_visit_enabled(ack_email_sent_cb, None)
 
@@ -129,8 +127,6 @@ table_configuration = {
         {'name': 'Profiel', 'data': 'profile_text', 'order_by': EndUser.profile, 'orderable': True},
         {'name': 'Code', 'data': 'code', 'order_by': EndUser.code, 'orderable': True},
         {'name': 'Reg-bericht verzonden', 'data': 'email_sent', 'order_by': EndUser.email_sent, 'orderable': True,
-         'celltoggle': 'standard'},
-        {'name': 'Bevraging-bericht verzonden', 'data': 'survey_email_sent', 'order_by': EndUser.survey_email_sent, 'orderable': True,
          'celltoggle': 'standard'},
         {'name': 'Actief', 'data': 'enabled', 'order_by': EndUser.enabled, 'orderable': True,
          'celltoggle': 'standard'},

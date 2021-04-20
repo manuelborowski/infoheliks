@@ -181,6 +181,10 @@ class EndUser(db.Model):
             'profile_text': self.profile_to_dutch(),
             'is_guest': self.profile == EndUser.Profile.E_GUEST,
             'is_coworker': self.profile == EndUser.Profile.E_COWORKER,
+            'code': self.code,
+            'email_sent': self.email_sent,
+            'email-send-retry': self.email_send_retry,
+            'enabled': self.enabled,
         }
     #
     # def ret_dict(self):
