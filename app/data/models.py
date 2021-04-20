@@ -2,7 +2,7 @@ from app import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import UniqueConstraint
-import babel
+import babel, datetime
 from sqlalchemy.sql import func
 from babel.dates import get_day_names, get_month_names
 
@@ -163,26 +163,25 @@ class EndUser(db.Model):
     def profile_to_dutch(self):
         if self.profile == EndUser.Profile.E_GUEST:
             return 'Bezoeker'
+        if self.profile == EndUser.Profile.E_COWORKER:
+            return 'Medewerker'
 
     def __repr__(self):
         return f'{self.email}/{self.full_name()}/{self.code}/{self.profile}'
 
-    # def flat(self):
-    #     return {
-    #         'id': self.id,
-    #         'end-user-email': self.email,
-    #         'end-user-first-name': self.first_name,
-    #         'end-user-last-name': self.last_name,
-    #         'full_name': f'{self.first_name} {self.last_name}',
-    #         'last_login': self.last_login,
-    #         'end-user-profile': self.profile,
-    #         'profile_text': self.profile_to_dutch(),
-    #         'sub_profile': self.sub_profile,
-    #         'initials': ''.join([n[0] for n in self.full_name().split(' ') if n != ''][:2]),
-    #         'is_guest': self.profile == EndUser.Profile.E_GUEST,
-    #         'is_floor_coworker': self.profile == EndUser.Profile.E_FLOOR_COWORKER,
-    #         'is_fair_coworker': self.profile == EndUser.Profile.E_FAIR_COWORKER,
-    #     }
+    def flat(self):
+        return {
+            'id': self.id,
+            'end-user-email': self.email,
+            'end-user-first-name': self.first_name,
+            'end-user-last-name': self.last_name,
+            'full_name': f'{self.first_name} {self.last_name}',
+            'last_login': self.last_login,
+            'end-user-profile': self.profile,
+            'profile_text': self.profile_to_dutch(),
+            'is_guest': self.profile == EndUser.Profile.E_GUEST,
+            'is_coworker': self.profile == EndUser.Profile.E_COWORKER,
+        }
     #
     # def ret_dict(self):
     #     flat = self.flat()
@@ -215,10 +214,10 @@ class EndUser(db.Model):
     #     flat.update({'id': self.id, 'DT_RowId': self.id})
     #     return flat
     #
-    # def set_timestamp(self):
-    #     self.timestamp = datetime.datetime.now()
-    #     db.session.commit()
-    #
+    def set_timestamp(self):
+        self.timestamp = datetime.datetime.now()
+        db.session.commit()
+
     # def set_timeslot(self, timeslot):
     #     self.timeslot = timeslot
     #     db.session.commit()

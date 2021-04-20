@@ -32,41 +32,19 @@
                     <div class="alert alert-danger" role="alert">
                         <h4 class="alert-heading">Foutmelding!</h4>
                         <h5>Onze excuses, de infosessie is nog niet toegankelijk.</h5>
-                        <h5>Probeer opnieuw op de dag en uur dat u hebt gereserveerd.</h5>
+                        <h5>Probeer opnieuw op maandag 3 mei om 19 uur.</h5>
                     </div>
                 {% endif %}
 
-                {% if type =='register-guest-ok' %}
+                {% if type =='register-ok' %}
                     <div class="alert alert-success" role="alert">
-                        <h5>Je registratie voor de infodag ‘De stap naar het secundair onderwijs’ is succesvol voltooid!</h5>
+                        <h5>Je registratie voor de de digitale infodag is succesvol voltooid!</h5>
                         <br>
-                        <h5>Binnen enkele minuten ontvang je een bevestigingsmail met de nodige informatie. Mocht je deze mail niet ontvangen hebben, check dan in ieder geval de map ‘ongewenste mail’.</h5>
-                        <h5>Wij ontmoeten je in ieder geval graag op {{ info.timeslot }}</h5>
+                        <h5>Binnen enkele minuten ontvang je een bevestigingsmail met de nodige informatie. Mocht je deze mail niet ontvangen hebben, check dan de map ‘ongewenste mail’.</h5>
+                        <h5>Wij ontmoeten je in ieder geval graag op maandag 3 mei om 19 uur.</h5>
                         <br>
                         <h5>Tot gauw!</h5>
                         <h5>Scholengemeenschap HeLiKs</h5>
-                    </div>
-                {% endif %}
-
-                {% if type =='register-floor-coworker-ok' %}
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading">Registratie/aanpassing is een success</h4>
-                        <h5>U heeft gekozen voor: {{ info.sub_profile }}</h5>
-                        <hr>
-                        <h5>Er wordt u nog een mail toegestuurd met extra informatie.</h5>
-                        <h5>U mag dit venster sluiten.</h5>
-                        </p>
-                    </div>
-                {% endif %}
-
-                {% if type =='register-fair-coworker-ok' %}
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading">Registratie/aanpassing is een success</h4>
-                        <h5>U heeft gekozen voor deze school: {{ info.sub_profile }}</h5>
-                        <hr>
-                        <h5>Er wordt u nog een mail toegestuurd met extra informatie.</h5>
-                        <h5>U mag dit venster sluiten.</h5>
-                        </p>
                     </div>
                 {% endif %}
 
@@ -104,51 +82,6 @@
                             <hr>
                         {% endif %}
                         <p>Gelieve een bericht te sturen naar <a href="mailto:manuel.borowski@campussintursula.be">manuel.borowski@campussintursula.be</a>
-                        </p>
-                    </div>
-                {% endif %}
-
-                {% if type =='not-enough-visits' %}
-                    <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading">Foutmelding!</h4>
-                        <h5>Onze excuses, het tijdslot {{ info.timeslot }} is reeds volzet.</h5>
-                        <h5>Gelieve een ander tijdslot te kiezen.</h5>
-                        <hr>
-                        <a class="btn btn-success btn-lg" type="submit"
-                           href="{{ url_for('end_user.register', code = info.code) }}">Registreren</a>
-                        </p>
-                    </div>
-                {% endif %}
-
-                {% if type =='no-visit-selected' %}
-                    <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading">Foutmelding!</h4>
-                        <h5>U hebt geen tijdslot geselecteerd, gelieve nogmaals te proberen.</h5>
-                        <hr>
-                        <a class="btn btn-success btn-lg" type="submit"
-                           href="{{ url_for('end_user.register', code = info.code) }}">Registreren</a>
-                        </p>
-                    </div>
-                {% endif %}
-
-                {% if type =='no-floor-selected' %}
-                    <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading">Foutmelding!</h4>
-                        <h5>U hebt geen instanctie geselecteerd, gelieve nogmaals te proberen.</h5>
-                        <hr>
-                        <a class="btn btn-success btn-lg" type="submit"
-                           href="{{ url_for('end_user.register', code = info.code) }}">Registreren</a>
-                        </p>
-                    </div>
-                {% endif %}
-
-                {% if type =='no-fair-selected' %}
-                    <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading">Foutmelding!</h4>
-                        <h5>U hebt geen school geselecteerd, gelieve nogmaals te proberen.</h5>
-                        <hr>
-                        <a class="btn btn-success btn-lg" type="submit"
-                           href="{{ url_for('end_user.register', code = info.code) }}">Registreren</a>
                         </p>
                     </div>
                 {% endif %}

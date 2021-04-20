@@ -15,10 +15,11 @@ flask_app = Flask(__name__, instance_relative_config=True, template_folder='pres
 # V0.1: copy from infodemol 1.10
 # V0.2: registration seems to be ok
 # V0.3: install gevent
+# V0.4: reservation and enter are ok.
 
 @flask_app.context_processor
 def inject_version():
-    return dict(version='V0.3')
+    return dict(version='V0.4')
 
 
 # enable logging

@@ -25,12 +25,11 @@
 {% block scripts %}
     {{ super() }}
     <script>
-        var user =
-        {{ config_data.user | tojson }}
-        var template =
-        {{ config_data.template | tojson }}
-        var default_values =
-        {{ config_data.default_values | tojson }}
+
+        let config_data = {{ config_data | tojson }};
+        let user = config_data.user;
+        let template = config_data.template;
+        let default_values = [];
     </script>
     <script type="text/javascript"> {% include "end_user/infomoment.js" %}</script>
 {% endblock %}

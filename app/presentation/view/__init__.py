@@ -63,11 +63,6 @@ def prepare_enter_form(code):
                 html = embedded_video_template.replace('{{URL-TAG}}', url)
                 html = html.replace('{{TITLE-TAG}}', title)
                 child['html'] = html.replace('{{TOOLTIP-TAG}}', tooltip)
-            elif type == 'chat-room':
-                child = mutils.deepcopy(formio_component_templates['content'])
-                title, id = mroom.get_chat_room_configuration(item['id'], ret.ret['user'])
-                html = chat_room_template.replace('{{TITLE-TAG}}', title)
-                child['html'] = html.replace('{{ID-TAG}}', id)
             elif type == 'floating-video':
                 child = mutils.deepcopy(formio_component_templates['content'])
                 tooltip = get_tooltip_from_item(item)
@@ -109,7 +104,7 @@ def prepare_enter_form(code):
                 child['collapsed'] = False
                 child['collapsible'] = False
                 child['title'] = item['title']
-                wonder_links = menter.get_wonder_link()
+                wonder_links = menter.get_wonder_links()
                 for link in wonder_links:
                     inner_child = mutils.deepcopy(formio_component_templates['content'])
                     template = mutils.deepcopy(wonder_link_template)
@@ -122,16 +117,15 @@ def prepare_enter_form(code):
     ret = menter.end_user_wants_to_enter(code)
     if ret.ret:
         embedded_video_template = msettings.get_embedded_video_template()
-        chat_room_template = msettings.get_chat_room_template()
         floating_video_template = msettings.get_floating_video_template()
         floating_document_template = msettings.get_floating_document_template()
         link_template = msettings.get_link_template()
         wonder_link_template = msettings.get_wonder_link_template()
         template = ret.ret['template']
-        for tab, items in ret.ret['tabpages'].items():
-            tab_component = search_component(template, tab)
-            if tab_component:
-                process_items(tab_component['components'], items)
+        for key, items in ret.ret['content'].items():
+            key_component = search_component(template, key)
+            if key_component:
+                process_items(key_component['components'], items)
     return ret
 
 

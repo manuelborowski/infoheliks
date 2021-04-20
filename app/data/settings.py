@@ -104,7 +104,8 @@ default_configuration_settings = {
     'test-wonder-room': (True, Settings.SETTING_TYPE.E_BOOL),
 
     'enter-site-popup-template': ('', Settings.SETTING_TYPE.E_STRING),
-    'site-open-at': ('2021-05-03 19:00', Settings.SETTING_TYPE.E_DATETIME),
+    # 'site-open-at': ('2021-05-03 19:00', Settings.SETTING_TYPE.E_DATETIME),
+    'site-open-at': (datetime.datetime(2021, 5, 3, 19, 00), Settings.SETTING_TYPE.E_DATETIME),
 }
 
 

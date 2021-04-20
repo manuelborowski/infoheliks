@@ -22,7 +22,7 @@ def end_user_wants_to_enter(code=None):
     is_opened = msettings.get_configuration_setting('enable-enter-guest')
     user = mend_user.get_first_end_user(code=code)
     if user:
-        if user.end_user.profile == Profile.E_GUEST:
+        if user.profile == Profile.E_GUEST:
             now = datetime.datetime.now()
             site_open = msettings.get_configuration_setting('site-open-at')
             delta = (site_open - now).total_seconds()
@@ -32,7 +32,7 @@ def end_user_wants_to_enter(code=None):
         ret = {
             'template': json.loads(msettings.get_configuration_setting('infosession-template')),
             'user': user.flat(),
-            'tabpages': json.loads(msettings.get_configuration_setting('infosession-content-json'))
+            'content': json.loads(msettings.get_configuration_setting('infosession-content-json'))
             }
         return EnterResult(result=EnterResult.Result.E_OK, ret=ret)
     return EnterResult(result=EnterResult.Result.E_NOT_OPENED_YET)
