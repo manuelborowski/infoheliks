@@ -17,10 +17,11 @@ flask_app = Flask(__name__, instance_relative_config=True, template_folder='pres
 # V0.3: install gevent
 # V0.4: reservation and enter are ok.
 # V0.5: reservation overview is ok.  Reservation can be removed
+# V0.6: cosmetic update
 
 @flask_app.context_processor
 def inject_version():
-    return dict(version='V0.5')
+    return dict(version='V0.6')
 
 
 # enable logging
