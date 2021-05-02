@@ -12,7 +12,8 @@ def formiodate_to_datetime(formio_date):
 
 
 def datetime_to_formiodate(date):
-    string = f"{datetime.datetime.strftime(date, '%Y-%m-%dT%H:%M')}:00+01:00"
+    delta_utc = datetime.datetime.now().astimezone().utcoffset().seconds//3600
+    string = f"{datetime.datetime.strftime(date, '%Y-%m-%dT%H:%M')}:00+{delta_utc:02d}:00"
     return string
 
 def datetime_to_string(date):

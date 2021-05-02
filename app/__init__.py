@@ -19,10 +19,11 @@ flask_app = Flask(__name__, instance_relative_config=True, template_folder='pres
 # V0.5: reservation overview is ok.  Reservation can be removed
 # V0.6: cosmetic update
 # V0.7: cosmetic update
+# V0.8: bugfixed formio datetime
 
 @flask_app.context_processor
 def inject_version():
-    return dict(version='V0.7')
+    return dict(version='V0.8')
 
 
 # enable logging

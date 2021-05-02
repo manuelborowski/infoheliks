@@ -12,13 +12,14 @@ from app.application import settings as msettings
 @login_required
 def show():
     default_settings = msettings.get_configuration_settings()
+    default_settings['site-open-at'] = mutils.datetime_to_formiodate(default_settings['site-open-at'])
     return render_template('/settings/settings.html',
                            settings_form=settings_formio, default_settings=default_settings)
 
 
 def update_settings_cb(msg, client_sid=None):
     data = msg['data']
-    if data['setting'] == 'timeslot-first-start' or data['setting'] == 'timeslot-break-first-start':
+    if data['setting'] == 'site-open-at':
         data['value'] = mutils.formiodate_to_datetime(data['value'])
     msettings.set_configuration_setting(data['setting'], data['value'])
 
@@ -50,6 +51,44 @@ settings_formio = \
                         "type": "checkbox",
                         "input": true,
                         "defaultValue": false
+                    },
+                    {
+                        "label": "Site opent op",
+                        "labelPosition": "left-left",
+                        "displayInTimezone": "utc",
+                        "format": "yyyy-MM-dd HH:mm",
+                        "tableView": false,
+                        "enableMinDateInput": false,
+                        "datePicker": {
+                            "disableWeekends": false,
+                            "disableWeekdays": false
+                        },
+                        "enableMaxDateInput": false,
+                        "timePicker": {
+                            "showMeridian": false
+                        },
+                        "defaultValue": "2021-05-03T19:00:00+02:00",
+                        "key": "site-open-at",
+                        "type": "datetime",
+                        "input": true,
+                        "widget": {
+                            "type": "calendar",
+                            "displayInTimezone": "utc",
+                            "locale": "en",
+                            "useLocaleSettings": false,
+                            "allowInput": true,
+                            "mode": "single",
+                            "enableTime": true,
+                            "noCalendar": false,
+                            "format": "yyyy-MM-dd HH:mm",
+                            "hourIncrement": 1,
+                            "minuteIncrement": 1,
+                            "time_24hr": true,
+                            "minDate": null,
+                            "disableWeekends": false,
+                            "disableWeekdays": false,
+                            "maxDate": null
+                        }
                     }
                 ],
                 "collapsed": true
