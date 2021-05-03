@@ -154,6 +154,7 @@ class EndUser(db.Model):
     email_send_retry = db.Column(db.Integer(), default=0)
     survey_email_sent = db.Column(db.Boolean, default=False)
     survey_email_send_retry = db.Column(db.Integer(), default=0)
+    survey_result = db.Column(db.Text)
     enabled = db.Column(db.Boolean, default=True)
     code = db.Column(db.String(256))
 
@@ -183,6 +184,7 @@ class EndUser(db.Model):
             'is_coworker': self.profile == EndUser.Profile.E_COWORKER,
             'code': self.code,
             'email_sent': self.email_sent,
+            'survey_email_sent': self.survey_email_sent,
             'email-send-retry': self.email_send_retry,
             'enabled': self.enabled,
         }

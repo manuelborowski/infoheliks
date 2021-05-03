@@ -53,6 +53,15 @@ settings_formio = \
                         "defaultValue": false
                     },
                     {
+                        "label": "Bevraging activeren",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "persistent": false,
+                        "key": "enable-send-survey-email",
+                        "type": "checkbox",
+                        "input": true
+                    },
+                    {
                         "label": "Site opent op",
                         "labelPosition": "left-left",
                         "displayInTimezone": "utc",

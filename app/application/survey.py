@@ -51,6 +51,8 @@ def save_survey(data):
 
 def send_survey_email(**kwargs):
     try:
+        if not msettings.get_configuration_setting('enable-send-survey-email'):
+            return
         user = mend_user.get_first_not_sent_survey()
         if user:
             email_send_max_retries = msettings.get_configuration_setting('email-send-max-retries')
@@ -64,8 +66,8 @@ def send_survey_email(**kwargs):
             survey_url = f'{base_url}/survey_new?code={user.code}'
 
             email_content = email_content.replace('{{URL-TAG}}', f'<a href="{survey_url}">hier</a>')
-            log.info(f'"{email_subject}" to {user.end_user.email}')
-            ret = memail.send_email(user.end_user.email, email_subject, email_content)
+            log.info(f'"{email_subject}" to {user.email}')
+            ret = memail.send_email(user.email, email_subject, email_content)
             if ret:
                 user.set_survey_email_sent(True)
             return ret
@@ -76,34 +78,3 @@ def send_survey_email(**kwargs):
 
 
 memail.subscribe_send_email(send_survey_email, {})
-
-true = True
-false = False
-
-survey_default_results = \
-    {
-        "city": "",
-        "school": "",
-        "information-channel": {
-            "broodzak": false,
-            "infoborden": false,
-            "school": false,
-            "andere": false
-        },
-        "stage-2-score": {
-            "intro-movie": "",
-            "clb-info": "",
-            "scholengemeenschap-info": "",
-            "internaat-info": "",
-            "chat-info": ""
-        },
-        "stage-2-feedback": "",
-        "stage-3-score": {
-            "able-to-ask-questions": "",
-            "video-chat-experience": ""
-        },
-        "stage-3-feedback": "",
-        "guest-code": "",
-        "submit": false,
-        "information-channel-other": "",
-    }

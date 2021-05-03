@@ -2,6 +2,7 @@ from flask import Flask, render_template, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from flask_jsglue import JSGlue
+from flask_migrate import Migrate
 from werkzeug.routing import IntegerConverter as OrigIntegerConvertor
 import logging.handlers, os, sys
 from functools import wraps
@@ -20,10 +21,11 @@ flask_app = Flask(__name__, instance_relative_config=True, template_folder='pres
 # V0.6: cosmetic update
 # V0.7: cosmetic update
 # V0.8: bugfixed formio datetime
+# V0.9: added survey
 
 @flask_app.context_processor
 def inject_version():
-    return dict(version='V0.8')
+    return dict(version='V0.9')
 
 
 # enable logging
@@ -94,7 +96,7 @@ login_manager.init_app(flask_app)
 login_manager.login_message = 'Je moet aangemeld zijn om deze pagina te zien!'
 login_manager.login_view = 'auth.login'
 
-# migrate = Migrate(flask_app, db)
+migrate = Migrate(flask_app, db)
 
 #configure e-mailclient
 email = Mail(flask_app)

@@ -100,6 +100,7 @@ default_configuration_settings = {
     'survey-default-results-template': ('', Settings.SETTING_TYPE.E_STRING),
     'survey-mail-subject-template': ('', Settings.SETTING_TYPE.E_STRING),
     'survey-mail-content-template': ('', Settings.SETTING_TYPE.E_STRING),
+    'enable-send-survey-email': (False, Settings.SETTING_TYPE.E_BOOL),
 
     'test-wonder-room': (True, Settings.SETTING_TYPE.E_BOOL),
 

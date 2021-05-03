@@ -152,7 +152,7 @@ def get_first_not_sent_registration():
 
 def get_first_not_sent_survey():
     end_user = EndUser.query.filter(EndUser.enabled)
-    end_user = end_user.filter(not EndUser.survey_email_sent)
+    end_user = end_user.filter(not_(EndUser.survey_email_sent))
     end_user = end_user.first()
     return end_user
 

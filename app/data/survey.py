@@ -16,12 +16,12 @@ def add_survey(code, data):
     return None
 
 
-def update_survey(survey, data=None):
+def update_survey(user, data=None):
     try:
         if data:
-            survey.result = data
+            user.survey_result = data
         db.session.commit()
-        return survey
+        return user
     except Exception as e:
         mutils.raise_error('could not update survey', e)
     return None
@@ -52,7 +52,7 @@ def get_first_survey(code=None):
 
 
 def pre_filter():
-    return db.session.query(EndUserSurvey)
+    return db.session.query(EndUser).filter(EndUser.survey_result != '')
 
 
 def search_data(search_string):
@@ -69,8 +69,7 @@ def search_data(search_string):
 def format_data(db_list):
     out = []
     for i in db_list:
-        survey = i.ret_dict()
-        em = json.loads(survey['result'])
+        em = json.loads(i.survey_result)
         em['row_action'] = f"{i.id}"
         em['id'] = f"{i.id}"
         em['DT_RowId'] = f"{i.id}"
