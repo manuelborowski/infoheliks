@@ -48,7 +48,7 @@ def item_edit(done=False, id=-1):
         if ret.result == ret.Result.E_NO_REGISTRATION_FOUND:
             flash_plus('Geen registratie gevonden')
         return render_template('end_user/register.html', config_data=ret.registration,
-                               registration_endpoint = 'reservation.reservation_save')
+                               registration_endpoint='reservation.reservation_save')
     except Exception as e:
         log.error(f'could not edit reservation {request.args}: {e}')
         return redirect(url_for('reservation.show'))
@@ -113,8 +113,6 @@ mreservation.subscribe_end_user_survey_email_sent(ack_email_sent_cb, None)
 mreservation.subscribe_end_user_email_send_retry(ack_email_sent_cb, None)
 mreservation.subscribe_visit_enabled(ack_email_sent_cb, None)
 
-
-
 table_configuration = {
     'view': 'reservation',
     'title': 'Reservaties',
@@ -135,7 +133,8 @@ table_configuration = {
          'celltoggle': 'standard'},
         {'name': 'Actief', 'data': 'enabled', 'order_by': EndUser.enabled, 'orderable': True,
          'celltoggle': 'standard'},
-        {'name': 'Tx-retry', 'data': 'email-send-retry', 'order_by': EndUser.email_send_retry, 'orderable': True, 'celledit': 'text'},
+        {'name': 'Tx-retry', 'data': 'email-send-retry', 'order_by': EndUser.email_send_retry, 'orderable': True,
+         'celledit': 'text'},
     ],
     'filter': [],
     'item': {

@@ -5,7 +5,7 @@ from flask_login import login_required
 from app.presentation.view import base_multiple_items
 from app.data import survey as msurvey
 from app.application import reservation as mreservation, settings as msettings, socketio as msocketio
-from app.data.models import EndUser
+from app.data.models import EndUserSurvey
 from app.presentation.layout.utils import flash_plus, button_pressed
 from app.presentation.view import update_available_periods, false, true, null, prepare_registration_form
 
@@ -41,13 +41,13 @@ table_configuration = {
     'template': [
         {'name': 'row_action', 'data': 'row_action', 'width': '2%'},
 
-        {'name': 'Woonplaats', 'data': 'city', 'order_by': EndUser.code, 'orderable': True},
-        {'name': 'School', 'data': 'school', 'order_by': EndUser.code, 'orderable': True},
-        {'name': 'Introfilm', 'data': 'stage-2-score.intro-movie', 'order_by': EndUser.code, 'orderable': True},
-        {'name': 'Deel één feedback', 'data': 'stage-2-feedback', 'order_by': EndUser.code, 'orderable': True},
-        {'name': 'Vragen stellen', 'data': 'stage-3-score.able-to-ask-questions', 'order_by': EndUser.code, 'orderable': True},
-        {'name': 'Video chat', 'data': 'stage-3-score.video-chat-experience', 'order_by': EndUser.code, 'orderable': True},
-        {'name': 'Deel twee feedback', 'data': 'stage-3-feedback', 'order_by': EndUser.code, 'orderable': True},
+        {'name': 'Woonplaats', 'data': 'city', 'order_by': EndUserSurvey.code, 'orderable': True},
+        {'name': 'School', 'data': 'school', 'order_by': EndUserSurvey.code, 'orderable': True},
+        {'name': 'Introfilm', 'data': 'stage-2-score.intro-movie', 'order_by': EndUserSurvey.code, 'orderable': True},
+        {'name': 'Deel één feedback', 'data': 'stage-2-feedback', 'order_by': EndUserSurvey.code, 'orderable': True},
+        {'name': 'Vragen stellen', 'data': 'stage-3-score.able-to-ask-questions', 'order_by': EndUserSurvey.code, 'orderable': True},
+        {'name': 'Video chat', 'data': 'stage-3-score.video-chat-experience', 'order_by': EndUserSurvey.code, 'orderable': True},
+        {'name': 'Deel twee feedback', 'data': 'stage-3-feedback', 'order_by': EndUserSurvey.code, 'orderable': True},
     ],
     'filter': [],
     'item': {},

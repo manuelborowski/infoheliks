@@ -38,12 +38,15 @@ def save_survey(data):
     try:
         code = data['guest-code']
         user = mend_user.get_first_end_user(code=code)
-        if user:
-            template = json.loads(msettings.get_configuration_setting('survey-default-results-template'))
-            template = mutils.deepupdate(template, data)
-            data_string = json.dumps(template).replace('true', '1').replace('false', '0')
-            msurvey.update_survey(user, data=data_string)
-            return SurveyResult(result=SurveyResult.Result.E_OK)
+        survey = msurvey.get_first_survey(code=code)
+        template = json.loads(msettings.get_configuration_setting('survey-default-results-template'))
+        template = mutils.deepupdate(template, data)
+        data_string = json.dumps(template).replace('true', '1').replace('false', '0')
+        if survey:
+            msurvey.update_survey(survey=survey, data=data_string)
+        else:
+            msurvey.add_survey(code=code, data=data_string)
+        return SurveyResult(result=SurveyResult.Result.E_OK)
     except Exception as e:
         mutils.raise_error(f'could not add survey', e)
     return SurveyResult(result=SurveyResult.Result.E_NO_VALID_CODE)

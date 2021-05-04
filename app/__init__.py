@@ -22,10 +22,11 @@ flask_app = Flask(__name__, instance_relative_config=True, template_folder='pres
 # V0.7: cosmetic update
 # V0.8: bugfixed formio datetime
 # V0.9: added survey
+# V0.10: added survey correctly
 
 @flask_app.context_processor
 def inject_version():
-    return dict(version='V0.9')
+    return dict(version='V0.10')
 
 
 # enable logging

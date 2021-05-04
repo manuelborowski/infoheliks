@@ -154,7 +154,6 @@ class EndUser(db.Model):
     email_send_retry = db.Column(db.Integer(), default=0)
     survey_email_sent = db.Column(db.Boolean, default=False)
     survey_email_send_retry = db.Column(db.Integer(), default=0)
-    survey_result = db.Column(db.Text)
     enabled = db.Column(db.Boolean, default=True)
     code = db.Column(db.String(256))
 
@@ -188,46 +187,11 @@ class EndUser(db.Model):
             'email-send-retry': self.email_send_retry,
             'enabled': self.enabled,
         }
-    #
-    # def ret_dict(self):
-    #     flat = self.flat()
-    #     flat.update({'id': self.id, 'DT_RowId': self.id})
-    #     return flat
 
-    # def timeslot_string(self, layout=None):
-    #     if self.timeslot is None: return ''
-    #     layout = '%Y-%m-%dT%H:%M' if layout == None else layout
-    #     return datetime.datetime.strftime(self.timeslot, layout)
-    #
-    # def flat(self):
-    #     visit = {
-    #         'visit_id': self.id,
-    #         'registration-code': self.code,
-    #         'enabled': self.enabled,
-    #         'email_sent': self.email_sent,
-    #         'survey_email_sent': self.survey_email_sent,
-    #         'timeslot': datetime_to_dutch_datetime_string(self.timeslot),
-    #         'code': self.code,
-    #         'room_code': self.room_code,
-    #         'email-send-retry': self.email_send_retry
-    #     }
-    #     user = self.end_user.flat()
-    #     visit.update(user)
-    #     return visit
-    #
-    # def ret_dict(self):
-    #     flat = self.flat()
-    #     flat.update({'id': self.id, 'DT_RowId': self.id})
-    #     return flat
-    #
     def set_timestamp(self):
         self.timestamp = datetime.datetime.now()
         db.session.commit()
 
-    # def set_timeslot(self, timeslot):
-    #     self.timeslot = timeslot
-    #     db.session.commit()
-    #
     ack_email_sent_cb = []
 
     def set_email_sent(self, value):
